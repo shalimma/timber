@@ -166,6 +166,11 @@ public class LuaLoader : Node
 
 				if (config.team.ToLower().Trim() == "player")
 					player_actor_spawn_positions.Add(spawn_pos);
+
+				if (config.name == "Chunk")
+				{
+					EventBus.Publish<EnemyDataLoadedEvent>(new EnemyDataLoadedEvent(config));
+				}
 			}
 
 			x++;
@@ -231,7 +236,7 @@ public class LuaLoader : Node
 	}
 
 
-	void SpawnActorOfType(ActorConfig config, Vector3 position)
+	public void SpawnActorOfType(ActorConfig config, Vector3 position)
     {
 		/* Spawn actor scene */
 		PackedScene actor_scene = (PackedScene)ResourceLoader.Load("res://scenes/actor.tscn");
@@ -245,7 +250,11 @@ public class LuaLoader : Node
 
 		actor_script.Configure(config);
 
-        /* customize actor aesthetics */
+		/* customize actor aesthetics */
+
+		GD.Print(config.name);
+        GD.Print(config);
+
 
         /* Load scripts of an actor */
         foreach (string script_name in config.scripts)
@@ -347,3 +356,13 @@ public class ModFileManifest
 
 //May move elsewhere
 public class TileDataLoadedEvent{ }
+
+public class EnemyDataLoadedEvent
+{
+	public ActorConfig enemyConfig;
+
+	public EnemyDataLoadedEvent(ActorConfig config)
+	{
+		enemyConfig = config;
+	}
+}

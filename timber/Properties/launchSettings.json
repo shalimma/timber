@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "lua_experiment": {
+      "commandName": "Project",
+      "commandLineArgs": "-e --path \"C:\\Users\\shali\\Documents\\Timber\\timber\\timber\"",
+      "workingDirectory": "C:\\Users\\shali\\Documents\\Timber\\timber\\timber"
+    }
+  }
+}
