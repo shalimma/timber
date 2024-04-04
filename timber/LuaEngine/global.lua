@@ -59,6 +59,13 @@ function GetValue(obj,key)
 	return coroutine_data[#coroutine_data]
 end
 
+function SpawnEnemy()
+	coroutine.yield(
+		{obj="global",
+		type="S"})
+end
+
+
 -- For anything relating to process
 function global:tick(delta)
 	global.delta_time = delta

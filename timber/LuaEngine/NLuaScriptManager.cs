@@ -173,6 +173,13 @@ public class NLuaScriptManager : Node
             GD.Print(actor.ToString() + " just posted " + cmd["toastString"] + " to the toast!");
 
         }
+        else if (command == "S")
+        {
+            GD.Print("Lua Spawn!");
+            WaveManager waveManager = new WaveManager();
+            waveManager.SpawnEnemy();
+
+        }
 
         return null;
     }

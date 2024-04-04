@@ -14,6 +14,10 @@ end
 function testluaobject:testfunc()
 	--local parent = self:get_node("../../CustomScriptManager")
 	--for i=1,10 do 
+
+	Print("Spawning Enemy!")
+	SpawnEnemy()
+
 	myvariable = false
 	WaitForSeconds(1)
 	SetDestination(self,self.x-3, self.z)

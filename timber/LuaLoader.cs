@@ -167,8 +167,14 @@ public class LuaLoader : Node
 				if (config.team.ToLower().Trim() == "player")
 					player_actor_spawn_positions.Add(spawn_pos);
 
-				//Test Code:
-				if(current_char == 'm' || current_char == 'q')
+                if (config.name == "Chunk")
+                {
+					GD.Print(config.name + " loaded as wave enemy!");
+                    EventBus.Publish<EnemyDataLoadedEvent>(new EnemyDataLoadedEvent(config));
+                }
+
+                //Test Code:
+                if (current_char == 'm' || current_char == 'q')
 				{
                     NLuaScriptManager.Instance
 						.CreateActor(NLuaScriptManager.testClassName, NLuaScriptManager.GenerateObjectName(), new_actor);
@@ -355,3 +361,14 @@ public class ModFileManifest
 
 //May move elsewhere
 public class TileDataLoadedEvent{ }
+
+
+public class EnemyDataLoadedEvent
+{
+    public ActorConfig enemyConfig;
+
+    public EnemyDataLoadedEvent(ActorConfig config)
+    {
+        enemyConfig = config;
+    }
+}
