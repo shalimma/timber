@@ -33,6 +33,89 @@
 [ext_resource path="res://addons/YarnSpinner-Godot/Runtime/Views/OptionsListView.cs" type="Script" id=31]
 
 [sub_resource type="GDScript" id=2]
+script/source = "--- Debugging process started ---
+Godot Engine v3.5.3.stable.mono.official.6c814135b - https://godotengine.org
+OpenGL ES 2.0 Renderer: AMD Radeon(TM) Graphics
+ 
+Coroutine System Initialized.
+StatCommand
+Lua initialized
+Start Init
+web retrieving [game.config]
+web retrieving [lives_icon.png]
+retrieved [game.config]
+retrieved [lives_icon.png]
+web retrieving [mod_file_manifest.json]
+NEW SPHERE [(36.6761, 12.1712, 27.6394)]
+NEW SPHERE [(36.6761, 12.1712, 27.6394)]
+NEW SPHERE [(36.6761, 12.1712, 27.6394)]
+NEW SPHERE [(36.6761, 12.1712, 27.6394)]
+retrieved [mod_file_manifest.json]
+web retrieving [actor_definitions/chunk.actor]
+web retrieving [actor_definitions/cuff.actor]
+web retrieving [actor_definitions/mickey.actor]
+web retrieving [actor_definitions/spot.actor]
+retrieved [actor_definitions/chunk.actor]
+retrieved [actor_definitions/cuff.actor]
+retrieved [actor_definitions/mickey.actor]
+retrieved [actor_definitions/spot.actor]
+web retrieving [images/level1.png]
+web retrieving [scenes/level1.layout]
+web retrieving [scenes/level1.config]
+web retrieving [sounds/pre_battle.ogg]
+TOTAL USAGE CALLBACKS : 1
+web retrieving [sounds/bgm_btd_defeat.ogg]
+retrieved [scenes/level1.layout]
+retrieved [scenes/level1.config]
+retrieved [images/level1.png]
+retrieved [sounds/bgm_btd_defeat.ogg]
+web retrieving [images/mickey_idle.png]
+TOTAL USAGE CALLBACKS : 2
+TOTAL USAGE CALLBACKS : 3
+TOTAL USAGE CALLBACKS : 4
+TOTAL USAGE CALLBACKS : 5
+web retrieving [images/spot_pre_ko.png]
+web retrieving [images/spot_ko.png]
+web retrieving [images/spot_idle.png]
+TOTAL USAGE CALLBACKS : 6
+web retrieving [images/cuff_idle.png]
+TOTAL USAGE CALLBACKS : 7
+web retrieving [images/chunk_idle.png]
+TOTAL USAGE CALLBACKS : 8
+TOTAL USAGE CALLBACKS : 9
+Fog Of War Set Screen Width: 166
+Fog Of War Set Screen Height: 88
+Fog Of War Set Screen Width: 166
+Fog Of War Set Screen Height: 88
+Fog Of War Set Screen Width: 166
+Fog Of War Set Screen Height: 88
+PLAYER AT 46 18
+retrieved [sounds/pre_battle.ogg]
+NEW MARKER POS 1982.759 2368.421
+retrieved [images/mickey_idle.png]
+retrieved [images/spot_pre_ko.png]
+retrieved [images/spot_ko.png]
+retrieved [images/spot_idle.png]
+retrieved [images/cuff_idle.png]
+retrieved [images/chunk_idle.png]
+Fade in: -60
+Fade in: -60
+Fade in: -59.70002
+Fade in: -59.34002
+F[...]
+ [output overflow, print less text!]
+--- Debugging process stopped ---
+Create Node
+Set script
+Switch Scene Tab
+ Another resource is loaded from path 'res://scenes/MainMenu.cs' (possible cyclic resource inclusion).
+Switch Scene Tab
+ Another resource is loaded from path 'res://scenes/WaveManager.cs' (possible cyclic resource inclusion).
+Rename Node
+Create Node
+Rename Node
+Set autostart
+"
 
 [sub_resource type="SpatialMaterial" id=1]
 flags_unshaded = true
