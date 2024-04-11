@@ -20,28 +20,30 @@ public class Actor : Spatial
     // private int a = 2;
     // private string b = "text";
 
-    ActorConfig config;
+    protected ActorConfig config;
 
-    public Spatial view { get; private set; } // Good for scaling operations.
-    MeshInstance character_view;
-    SpatialMaterial character_material;
-    MeshInstance shadow_view;
-    StateManager state_manager;
+    public Spatial view { get; protected set; } // Good for scaling operations.
+    protected MeshInstance character_view;
+    protected SpatialMaterial character_material;
+    protected MeshInstance shadow_view;
+    protected StateManager state_manager;
    
 
-    IsSelectable selectable;
+    protected IsSelectable selectable;
 
-    Texture idle_sprite;
+    protected Texture idle_sprite;
     //Initial animation variables
     public bool initial_load = false;
-    public Vector3 initial_view_scale { get; private set; } = Vector3.One;
-    public Vector3 initial_rotation { get; private set; } = Vector3.Zero;
+    public Vector3 initial_view_scale { get; protected set; } = Vector3.One;
+    public Vector3 initial_rotation { get; protected set; } = Vector3.Zero;
     public TileData currentTile;
 
-    float desired_scale_x = 1.0f;
+    protected float desired_scale_x = 1.0f;
     public float GetDesiredScaleX() { return desired_scale_x; }
+    private Subscription<TileDataLoadedEvent> sub;
 
     bool dying = false;
+    bool isInvicible = false;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -54,7 +56,7 @@ public class Actor : Spatial
         selectable = GetNode<IsSelectable>("IsSelectable");
         time = GlobalTranslation.x + GlobalTranslation.z;
         animation_offset = GD.Randf() * 100.0f;
-        EventBus.Subscribe<TileDataLoadedEvent>((TileDataLoadedEvent e) =>
+        sub = EventBus.Subscribe<TileDataLoadedEvent>((TileDataLoadedEvent e) =>
         {
             TileData td = Grid.Get(GlobalTranslation);
             currentTile = td;
@@ -64,7 +66,7 @@ public class Actor : Spatial
         UpdateActorDict();
     }
 
-    public void Configure(ActorConfig info)
+    public virtual void Configure(ActorConfig info)
     {
         config = info;
         GetNode<HasTeam>("HasTeam").team = config.team;
@@ -204,6 +206,21 @@ public class Actor : Spatial
                 Kill(source);
                 return;
             }
+
+            //draws aggro
+            if (state_manager.states.ContainsKey("CombatState"))
+            {
+                CombatState c = (state_manager.states["CombatState"] as CombatState);
+                if (source != null)
+                {
+                    Coord targetCoord = Grid.ConvertToCoord(source.GlobalTranslation);
+                    if (c.WithinRange(targetCoord))
+                    {
+                        c.TargetActor = source;
+                        state_manager.EnableState("CombatState");
+                    }
+                }
+            }
         }
         else
         {
@@ -216,6 +233,7 @@ public class Actor : Spatial
 
     public void Kill(Actor source = null)//TODO needs clean up in map --- actors cannot move to tile where actor died
     {
+        currentTile.actor = null;
         bool endGame = config.name == "Spot";
         PackedScene scene = (PackedScene)ResourceLoader.Load("res://scenes/ActorKO.tscn");
         ActorKO new_ko = (ActorKO)scene.Instance();
@@ -223,7 +241,7 @@ public class Actor : Spatial
         new_ko.GlobalTranslation = GlobalTranslation;
         new_ko.GlobalRotation = GlobalRotation;
         new_ko.Scale = Scale;
-        new_ko.GetNode<Spatial>("view").Scale = view.Scale;
+        new_ko.GetNode<Spatial>("rotationPoint/view/mesh").Scale = view.Scale;
         if (config.pre_ko_sprite_filename != "" && config.ko_sprite_filename != "")
         {
             new_ko.Configure(ArborResource.Get<Texture>("images/" + config.pre_ko_sprite_filename), ArborResource.Get<Texture>("images/" + config.ko_sprite_filename), endGame, source);
@@ -244,6 +262,12 @@ public class Actor : Spatial
         console_manager.ActorDict[this.Name.ToLower()] = this;
     }
 
+   public override void _ExitTree()
+   {
+       EventBus.Unsubscribe(sub);
+       base._ExitTree();
+   }
+
     IEnumerator HurtAnimation()//TODO add actual animation
     {
         //turn color
@@ -253,7 +277,11 @@ public class Actor : Spatial
         char_mat.SetShaderParam("apply_red_tint", 0);
         //unturn color
     }
-    
+
+    public void setInvicible(bool invicible)
+    {
+        isInvicible = invicible;
+    }
 
 
 }
