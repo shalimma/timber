@@ -64,6 +64,64 @@ public class ProtobufParser : Node
                     scripts = attachedScripts
                 };
                 output = (T)(object)localActor;
+<<<<<<< Updated upstream
+=======
+            }
+            else if (file_extension == ".Config")
+            {
+                var gameConfig = Google.Protobuf.Message.GameConfigData.Parser.ParseFrom(body);
+
+                GameConfig localConfig = new GameConfig
+                {
+                    name = gameConfig.Name,
+                    title_screen_background_image = gameConfig.TitleScreenBackgroundImage,
+                    title_screen_logo_image = gameConfig.TitleScreenLogoImage,
+                    initial_scene_file = gameConfig.InitialSceneFile,
+                    gameover_image = gameConfig.GameoverImage,
+                    initial_continue_count = gameConfig.InitialContinueCount,
+                    cursor_image = gameConfig.CursorImage
+                };
+                output = (T)(object)localConfig;
+            }
+            else if (file_extension == ".JSON")
+            {
+                var modFile = Google.Protobuf.Message.ModFiles.Parser.ParseFrom(body);
+                List<string> list = new List<string>();
+
+                foreach (string item in modFile.Files)
+                {
+                    list.Append(item);
+                }
+
+                ModFileManifest modFilesArray = new ModFileManifest
+                {
+                    mod_files = list
+                };
+
+                output = (T)(object)modFilesArray;
+            }
+            else if (file_extension == ".CombatConfig")
+            {
+                var combatConfig = Google.Protobuf.Message.ActorCombatConfig.Parser.ParseFrom(body);
+
+                CombatConfig localConfig = new CombatConfig()
+                {
+                    name = combatConfig.StateName,
+                    attackRange = combatConfig.AttackRange,
+                    attackDamage = combatConfig.AttackDamage,
+                    criticalHitRate = combatConfig.CriticalHitRate,
+                    attackCooldown = combatConfig.AttackCooldown,
+                    attackRecovery = combatConfig.AttackRecovery,
+                    attackWindup = combatConfig.AttackWindup
+                };
+
+                output = (T)(object)localConfig;
+            }
+            else
+            {
+                output = (T)(object)"";
+            }
+>>>>>>> Stashed changes
         }
         else if (type == "ModFileManifest")
         {

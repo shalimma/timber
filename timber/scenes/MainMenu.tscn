@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 [gd_scene load_steps=9 format=2]
+=======
+[gd_scene load_steps=16 format=2]
+>>>>>>> Stashed changes
 
 [ext_resource path="res://QuitButton.cs" type="Script" id=1]
 [ext_resource path="res://scenes/PlayButton.cs" type="Script" id=2]
@@ -7,8 +11,55 @@
 [ext_resource path="res://scenes/HookesButton.tscn" type="PackedScene" id=5]
 [ext_resource path="res://LuaEngine/NLuaScriptManager.cs" type="Script" id=6]
 [ext_resource path="res://scenes/MainMenu.cs" type="Script" id=7]
+<<<<<<< Updated upstream
+=======
+[ext_resource path="res://protobuftesting/ProtobufParser.cs" type="Script" id=8]
+[ext_resource path="res://picture-in-picture/EditModeManager.cs" type="Script" id=9]
+[ext_resource path="res://picture-in-picture/ComputerScreen.cs" type="Script" id=10]
+>>>>>>> Stashed changes
 
 [sub_resource type="CanvasItemMaterial" id=1]
+
+[sub_resource type="Shader" id=4]
+code = "shader_type canvas_item;
+
+uniform vec2 texture_size;
+uniform float effect_strength : hint_range(0, 0.5) = 0.0;
+uniform float scanline_strength : hint_range(0, 1) = 0.3;
+uniform float distortion_strength : hint_range(0, 1) = 0.05;
+
+void fragment() {
+    vec2 uv = FRAGCOORD.xy / texture_size;
+
+    // Apply distortion
+    float distortion = sin(uv.y * texture_size.y) * distortion_strength * effect_strength;
+    uv.x += distortion;
+
+    // Sample the texture with the distorted UVs
+    vec4 screen_color = texture(TEXTURE, uv);
+
+    // Apply scanlines
+    float scanline = sin(uv.y * texture_size.y * 2.0) * scanline_strength;
+    screen_color.rgb -= scanline * 0.;
+
+	
+    COLOR = texture(TEXTURE, UV) + scanline * effect_strength;
+}
+"
+
+[sub_resource type="ShaderMaterial" id=5]
+resource_local_to_scene = true
+shader = SubResource( 4 )
+shader_param/texture_size = Vector2( 1, 1 )
+shader_param/effect_strength = 0.0
+shader_param/scanline_strength = 0.8
+shader_param/distortion_strength = 0.438
+
+[sub_resource type="QuadMesh" id=32]
+
+[sub_resource type="MeshTexture" id=33]
+mesh = SubResource( 32 )
+image_size = Vector2( 1920, 1080 )
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
@@ -17,32 +68,33 @@ margin_top = 1.0
 margin_bottom = 1.0
 script = ExtResource( 7 )
 
-[node name="bg" type="TextureRect" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -8.0
-margin_right = -8.0
-expand = true
-stretch_mode = 7
-
-[node name="WebBuildUploader" parent="bg" instance=ExtResource( 3 )]
-
 [node name="gradient" type="TextureRect" parent="."]
 modulate = Color( 0, 0, 0, 1 )
 material = SubResource( 1 )
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -85.0
+margin_top = -1229.0
+margin_bottom = -1144.0
 texture = ExtResource( 4 )
 expand = true
 stretch_mode = 1
 
+[node name="bg" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -1.0
+margin_bottom = -1.0
+expand = true
+stretch_mode = 7
+
+[node name="WebBuildUploader" parent="bg" instance=ExtResource( 3 )]
+
 [node name="title_logo" type="TextureRect" parent="."]
-margin_left = 285.0
-margin_top = 65.0
-margin_right = 776.0
-margin_bottom = 213.0
+margin_left = 1245.0
+margin_top = 598.0
+margin_right = 1736.0
+margin_bottom = 746.0
 
 [node name="quit_button" type="Button" parent="."]
 anchor_left = 0.5
@@ -50,9 +102,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = 88.0
-margin_top = -198.0
+margin_top = -809.0
 margin_right = 208.0
-margin_bottom = -158.0
+margin_bottom = -769.0
 rect_pivot_offset = Vector2( 100, 0 )
 script = ExtResource( 1 )
 
@@ -72,9 +124,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = -211.0
-margin_top = -197.0
+margin_top = -808.0
 margin_right = -91.0
-margin_bottom = -157.0
+margin_bottom = -768.0
 rect_pivot_offset = Vector2( 60, 20 )
 script = ExtResource( 2 )
 
@@ -94,9 +146,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = -62.0
-margin_top = -198.0
+margin_top = -809.0
 margin_right = 58.0
-margin_bottom = -158.0
+margin_bottom = -769.0
 rect_pivot_offset = Vector2( 100, 0 )
 
 [node name="Label" type="Label" parent="credits_button"]
@@ -113,9 +165,9 @@ autowrap = true
 anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -220.0
-margin_top = 58.0
+margin_top = 591.0
 margin_right = 222.0
-margin_bottom = 140.0
+margin_bottom = 673.0
 text = "GAME TITLE"
 align = 1
 valign = 1
@@ -123,6 +175,24 @@ valign = 1
 [node name="Node" type="Node" parent="."]
 script = ExtResource( 6 )
 
+<<<<<<< Updated upstream
+=======
+[node name="Protobuf" type="Node" parent="."]
+script = ExtResource( 8 )
+
+[node name="Editor" type="Node2D" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="Editor"]
+current = true
+script = ExtResource( 9 )
+
+[node name="computer_screen" type="Sprite" parent="Editor"]
+material = SubResource( 5 )
+position = Vector2( 960, 540 )
+texture = SubResource( 33 )
+script = ExtResource( 10 )
+
+>>>>>>> Stashed changes
 [connection signal="pressed" from="quit_button" to="quit_button" method="OnPressed"]
 [connection signal="pressed" from="play_button" to="play_button" method="OnPressed"]
 [connection signal="pressed" from="credits_button" to="credits_button" method="OnPressed"]

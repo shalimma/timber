@@ -1,0 +1,57 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://picture-in-picture/ComputerScreen.cs" type="Script" id=1]
+[ext_resource path="res://picture-in-picture/EditModeManager.cs" type="Script" id=3]
+
+[sub_resource type="Shader" id=4]
+code = "shader_type canvas_item;
+
+uniform vec2 texture_size;
+uniform float effect_strength : hint_range(0, 0.5) = 0.0;
+uniform float scanline_strength : hint_range(0, 1) = 0.3;
+uniform float distortion_strength : hint_range(0, 1) = 0.05;
+
+void fragment() {
+    vec2 uv = FRAGCOORD.xy / texture_size;
+
+    // Apply distortion
+    float distortion = sin(uv.y * texture_size.y) * distortion_strength * effect_strength;
+    uv.x += distortion;
+
+    // Sample the texture with the distorted UVs
+    vec4 screen_color = texture(TEXTURE, uv);
+
+    // Apply scanlines
+    float scanline = sin(uv.y * texture_size.y * 2.0) * scanline_strength;
+    screen_color.rgb -= scanline * 0.;
+
+	
+    COLOR = texture(TEXTURE, UV) + scanline * effect_strength;
+}
+"
+
+[sub_resource type="ShaderMaterial" id=5]
+resource_local_to_scene = true
+shader = SubResource( 4 )
+shader_param/texture_size = Vector2( 1, 1 )
+shader_param/effect_strength = 0.0
+shader_param/scanline_strength = 0.8
+shader_param/distortion_strength = 0.438
+
+[sub_resource type="QuadMesh" id=32]
+
+[sub_resource type="MeshTexture" id=33]
+mesh = SubResource( 32 )
+image_size = Vector2( 1920, 1080 )
+
+[node name="Editor" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+script = ExtResource( 3 )
+
+[node name="computer_screen" type="Sprite" parent="."]
+material = SubResource( 5 )
+position = Vector2( 960, 540 )
+texture = SubResource( 33 )
+script = ExtResource( 1 )
